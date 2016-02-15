@@ -38,7 +38,7 @@ import org.xwalk.core.internal.XWalkSettings;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-
+//Commit su GITHUB
 // Adapter for holding devices found through scanning.
 class LeDeviceListAdapter extends BaseAdapter {
     private ArrayList<Beacon> mLeDevices;
