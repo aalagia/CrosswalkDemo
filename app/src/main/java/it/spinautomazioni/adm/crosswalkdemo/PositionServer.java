@@ -175,8 +175,8 @@ public class PositionServer extends AsyncTask< Collection<Beacon>,Void,String> {
               m1.put("Maj", lBeacon.getId2().toString());
               //System.out.println("MAJOR è: " + lBeacon.getId2().toString());
               m1.put("Min", lBeacon.getId3().toString());
-              m1.put("TxPower",Integer.toString(lBeacon.getTxPower()));
-              m1.put("RSSI", Integer.toString(lBeacon.getRssi()));
+              m1.put("TxPower",(lBeacon.getTxPower()));
+              m1.put("RSSI", (lBeacon.getRssi()));
               m1.put("CalculatedDistance", (lBeacon.getDistance()));
               double formula = BeaconList.calculateDistance(lBeacon.getTxPower(), lBeacon.getRssi());
               m1.put("CalculatedDistanceFormula",formula);

@@ -29,6 +29,7 @@ import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.altbeacon.beacon.service.ArmaRssiFilter;
 import org.altbeacon.beacon.service.RunningAverageRssiFilter;
 import org.xwalk.core.XWalkNavigationHistory;
 import org.xwalk.core.XWalkPreferences;
@@ -126,8 +127,9 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
         //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         beaconManager.setForegroundScanPeriod(2500l);
-        BeaconManager.setRssiFilterImplClass(RunningAverageRssiFilter.class);
-        RunningAverageRssiFilter.setSampleExpirationMilliseconds(5000l);
+        //BeaconManager.setRssiFilterImplClass(RunningAverageRssiFilter.class);
+        //RunningAverageRssiFilter.setSampleExpirationMilliseconds(5000l);
+        BeaconManager.setRssiFilterImplClass(ArmaRssiFilter.class);
 
         beaconManager.bind(this);
 
