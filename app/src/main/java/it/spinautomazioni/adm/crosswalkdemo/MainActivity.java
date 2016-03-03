@@ -3,17 +3,21 @@ package it.spinautomazioni.adm.crosswalkdemo;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.ValueCallback;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,6 +26,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -33,9 +38,11 @@ import org.altbeacon.beacon.service.ArmaRssiFilter;
 import org.altbeacon.beacon.service.RunningAverageRssiFilter;
 import org.xwalk.core.XWalkNavigationHistory;
 import org.xwalk.core.XWalkPreferences;
+import org.xwalk.core.XWalkUIClient;
 import org.xwalk.core.XWalkView;
 import org.xwalk.core.internal.XWalkSettings;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -100,13 +107,34 @@ class LeDeviceListAdapter extends BaseAdapter {
 
 public class MainActivity extends AppCompatActivity implements BeaconConsumer{
 
+    class UIClient extends XWalkUIClient {
+
+        public UIClient(XWalkView xwalkView) {
+
+            super(xwalkView);
+
+        }
+
+        public void openFileChooser(XWalkView view,
+
+                                    ValueCallback<Uri> uploadFile, String acceptType, String capture) {
+
+            super.openFileChooser(view, uploadFile, acceptType, capture);
+
+            mFilePathCallback = uploadFile;
+
+            Log.d("fchooser", "Opened file chooser.");
+
+        }
+
+    }
 
     static XWalkView xWalkWebView;
     XWalkNavigationHistory xWalkHistory;
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BeaconManager beaconManager;
     private boolean EnableSendData;
-
+    private ValueCallback mFilePathCallback;
     private ArrayList<Double> meanRSSI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
         setContentView(R.layout.activity_main);
         xWalkWebView=(XWalkView)findViewById(R.id.xwalkWebView);
         xWalkWebView.addJavascriptInterface(new JsInterface(),"NativeInterface");
-
+        xWalkWebView.setUIClient(new UIClient(xWalkWebView));
         xWalkWebView.load("https://crosswalk-project.org", null);
         xWalkHistory=xWalkWebView.getNavigationHistory();
         // turn on debugging
@@ -141,6 +169,36 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
     }
 
 
+
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (xWalkWebView != null) {
+
+            if (mFilePathCallback != null) {
+                Uri result = intent == null || resultCode != Activity.RESULT_OK ? null
+                        : intent.getData();
+                if (result != null) {
+                    String path = MediaUtility.getPath(xWalkWebView.getContext(), result);
+                    try {
+                        Uri uri = Uri.fromFile(new File(path));
+                        mFilePathCallback.onReceiveValue(uri);
+                    }catch (Exception e){
+                        mFilePathCallback.onReceiveValue(null);
+                        Toast.makeText(MainActivity.xWalkWebView.getContext(), "Non riesco a caricare il file", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    mFilePathCallback.onReceiveValue(null);
+                }
+            }
+
+            mFilePathCallback = null;
+        }
+        //xWalkWebView.onActivityResult(requestCode, resultCode, intent);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -303,4 +361,6 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
         System.out.println("Sono Main ho ricevuto " + coordinate);
         xWalkWebView.load("javascript:androidtoJS("+ coordinate +")", null);
     }
+
+
 }

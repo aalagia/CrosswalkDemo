@@ -32,20 +32,25 @@ public class JsInterface {
     public String tablet(String sURL) {
 
         System.out.println("CAZZZOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-        new downloadFile().execute(sURL);
-        Uri data = Uri.parse("file://" + "/sdcard/IMG_20160114_172015.jpg");
+        File file = new File("/sdcard/serverfile/" + sURL);
+        if(!file.exists())
+            new downloadFile(sURL).execute(sURL);
+
+        //Uri data = Uri.parse("file://" + "/sdcard/IMG_20160114_172015.jpg");
         //Uri data = Uri.parse("http://www.google.it");
-        Intent playIntent = new Intent(Intent.ACTION_VIEW, data);
+        //Intent playIntent = new Intent(Intent.ACTION_VIEW, data);
         //MainActivity.xWalkWebView.getContext().startActivity(playIntent);
-        MimeTypeMap myMime = MimeTypeMap.getSingleton();
-        Intent newIntent = new Intent(Intent.ACTION_VIEW);
-        String mimeType = myMime.getMimeTypeFromExtension(fileExt("/sdcard/IMG_20160114_172015.jpg").substring(1));
-        newIntent.setDataAndType(Uri.fromFile(new File("/sdcard/IMG_20160114_172015.jpg")),mimeType);
-        newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        try {
-            MainActivity.xWalkWebView.getContext().startActivity(newIntent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText( MainActivity.xWalkWebView.getContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
+        else {
+            MimeTypeMap myMime = MimeTypeMap.getSingleton();
+            Intent newIntent = new Intent(Intent.ACTION_VIEW);
+            String mimeType = myMime.getMimeTypeFromExtension(fileExt("/sdcard/serverfile/" + sURL).substring(1));
+            newIntent.setDataAndType(Uri.fromFile(new File("/sdcard/serverfile/" + sURL)), mimeType);
+            newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                MainActivity.xWalkWebView.getContext().startActivity(newIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(MainActivity.xWalkWebView.getContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
+            }
         }
         return "Sono il Tablet";
     }
