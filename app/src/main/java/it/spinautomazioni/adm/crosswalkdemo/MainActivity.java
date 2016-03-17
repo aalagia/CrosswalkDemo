@@ -154,10 +154,10 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
         //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=ff54,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"));
         //beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        beaconManager.setForegroundScanPeriod(2500l);
-        //BeaconManager.setRssiFilterImplClass(RunningAverageRssiFilter.class);
-        //RunningAverageRssiFilter.setSampleExpirationMilliseconds(5000l);
-        BeaconManager.setRssiFilterImplClass(ArmaRssiFilter.class);
+        beaconManager.setForegroundScanPeriod(1000l);
+        BeaconManager.setRssiFilterImplClass(RunningAverageRssiFilter.class);
+        RunningAverageRssiFilter.setSampleExpirationMilliseconds(5000l);
+        //BeaconManager.setRssiFilterImplClass(ArmaRssiFilter.class);
 
         beaconManager.bind(this);
 
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements BeaconConsumer{
                 break;
             case R.id.Webview_Map:
 
-                xWalkWebView.load("http://172.16.2.33:8080/SpinMap2.html", null);
+                xWalkWebView.load("http://172.16.2.34:8080/", null);
                 xWalkWebView.load("javascript:androidtoJS(NativeInterface.position())", null);
                 break;
 
