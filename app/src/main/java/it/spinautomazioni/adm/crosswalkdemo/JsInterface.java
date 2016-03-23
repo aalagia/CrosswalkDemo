@@ -17,29 +17,21 @@ import java.io.File;
 /**
  * Created by adm on 17/11/2015.
  */
-
+/*Interfaccia tra il codice javascript e la parte Android*/
 public class JsInterface {
 
     public JsInterface() {
     }
 
-    @JavascriptInterface
-    public String sayHello() {
-        return "Hello World!";
-    }
 
     @JavascriptInterface
-    public String tablet(String sURL) {
+    public String loadFile(String sURL) {
 
-        System.out.println("CAZZZOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+
         File file = new File("/sdcard/serverfile/" + sURL);
         if(!file.exists())
             new downloadFile(sURL).execute(sURL);
 
-        //Uri data = Uri.parse("file://" + "/sdcard/IMG_20160114_172015.jpg");
-        //Uri data = Uri.parse("http://www.google.it");
-        //Intent playIntent = new Intent(Intent.ACTION_VIEW, data);
-        //MainActivity.xWalkWebView.getContext().startActivity(playIntent);
         else {
             MimeTypeMap myMime = MimeTypeMap.getSingleton();
             Intent newIntent = new Intent(Intent.ACTION_VIEW);
@@ -52,13 +44,9 @@ public class JsInterface {
                 Toast.makeText(MainActivity.xWalkWebView.getContext(), "No handler for this type of file.", Toast.LENGTH_LONG).show();
             }
         }
-        return "Sono il Tablet";
+        return "File caricato";
     }
 
-    @JavascriptInterface
-    public int position() {
-        return 150;
-    }
 
     private String fileExt(String url) {
         if (url.indexOf("?") > -1) {

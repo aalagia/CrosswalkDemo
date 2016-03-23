@@ -13,9 +13,6 @@
         android:id="@+id/Webview_WebRtc"
         android:title="WebRtc"/>
     <item
-        android:id="@+id/Webview_JavaCall"
-        android:title="WebRtc"/>
-    <item
         android:id="@+id/Webview_Map"
-        android:title="MapSVG"/>
+        android:title="Map"/>
 </menu>

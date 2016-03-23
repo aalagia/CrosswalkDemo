@@ -6,19 +6,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enable"
+        android:text="Attiva Posizionamento"
         android:id="@+id/btnSend"
         android:onClick="onClickSendData"
         android:layout_alignTop="@+id/btnRefresh"
         android:layout_toEndOf="@+id/btnRefresh" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SendTest"
-        android:id="@+id/btnSendTest"
-        android:layout_alignTop="@+id/btnSend"
-        android:layout_toEndOf="@+id/btnSend"
-        android:onClick="onClickSendTest" />
     <org.xwalk.core.XWalkView
         android:id="@+id/xwalkWebView"
         android:orientation="vertical"

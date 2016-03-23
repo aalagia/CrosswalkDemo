@@ -18,6 +18,7 @@ import java.net.URL;
 
 /**
  * Created by Antonio on 02/03/16.
+ * La classe si occupa di effettuare il download di un file dal server
  */
 public class downloadFile extends AsyncTask<String, Integer, Integer> {
 
